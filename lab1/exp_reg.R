@@ -1,27 +1,41 @@
 library(ggplot2)
 
-x <- c(79.31, 57.43, 60.66, 90.55, 92.12, 71.30, 70.50, 91.25)
-y <- c(5.89, 3.84, 6.19, 9.22, 7.87, 6.29, 4.43, 8.91)
-data <- data.frame(x, y)
+exp.reg <- function(x, y, data){
+  y.log <- log(y)
 
-y.log <- log(y)
+  Mx.2 <- sum(x^2) / length(x)
+  Mx <- sum(x) / length(x)
+  Mxy <- sum(x * y.log) / length(x)
+  My <- sum(y.log) / length(y.log)
 
-Mx.2 <- sum(x^2) / length(x)
-Mx <- sum(x) / length(x)
-Mxy <- sum(x * y.log) / length(x)
-My <- sum(y.log) / length(y.log)
+  n <- (Mxy - Mx * My) / (Mx.2 - Mx * Mx)
+  b <- (Mx.2 * My - Mxy * Mx) / (Mx.2 - Mx * Mx)
+  a <- exp(b)
 
-n <- (Mxy - Mx * My) / (Mx.2 - Mx * Mx)
-b <- (Mx.2 * My - Mxy * Mx) / (Mx.2 - Mx * Mx)
-a <- exp(b)
+  eq <- sprintf("y = %f * e^(%f*x)", round(a, 3), round(n, 3))
 
-eq <- sprintf("y = %f * e^(%f*x)", a, n)
+  exp.model.y <- a * exp(1)^(n*x)
+  mse <- mean((y - exp.model.y)^2)
+  
+  return(c(eq, round(mse, 3)))
+}
 
-exp.model <- lm(y.log~x, data=data)
-mse <- mean(exp.model$residuals^2)
-mse
+exp.plot <- function (p, x, y, data){
+  y.log <- log(y)
+  
+  Mx.2 <- sum(x^2) / length(x)
+  Mx <- sum(x) / length(x)
+  Mxy <- sum(x * y.log) / length(x)
+  My <- sum(y.log) / length(y.log)
 
-p <- ggplot(data, aes(x=x, y=y))
-p + geom_point(color="Red") +
-  geom_line(aes(x = x, y = predict(exp.model)), color="Blue") +
-  labs(title="Exponential Regression", x="x", y="y")
+  n <- (Mxy - Mx * My) / (Mx.2 - Mx * Mx)
+  b <- (Mx.2 * My - Mxy * Mx) / (Mx.2 - Mx * Mx)
+  a <- exp(b)
+  
+  exp.model.y <- a * exp(1)^(n*x)
+  
+  p + geom_point(color="Red") +
+    geom_line(aes(x = x, y =exp.model.y), color="Blue") +
+    labs(title="Exponential Regression", x="x", y="y")
+
+}
