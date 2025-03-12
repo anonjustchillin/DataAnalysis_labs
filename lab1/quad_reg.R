@@ -34,6 +34,8 @@ quad.reg <- function(x, y, data){
   # Обчислення точності (MSE)
   mse <- mean(quad.model$residuals^2)
 
+  print(summary(quad.model))
+
   return (c(eq, round(mse, 3)))
 }
 

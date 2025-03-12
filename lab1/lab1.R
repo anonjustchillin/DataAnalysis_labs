@@ -5,8 +5,11 @@ source("lab1/exp_reg.R")
 source("lab1/log_reg.R")
 source("lab1/hyper_reg.R")
 
+
 x <- c(79.31, 57.43, 60.66, 90.55, 92.12, 71.30, 70.50, 91.25)
 y <- c(5.89, 3.84, 6.19, 9.22, 7.87, 6.29, 4.43, 8.91)
+
+cor(x, y, method = "pearson")
 
 data <- data.frame(x, y)
 row.1 <- c("Linear", lin.reg(x, y, data)) 

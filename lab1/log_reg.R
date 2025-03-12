@@ -22,7 +22,9 @@ log.reg <- function(x, y, data){
 
   # Обчислення точності (MSE)
   mse <- mean(log.model$residuals^2)
-  
+
+  print(summary(log.model))
+
   return (c(eq, round(mse, 3)))
 }
 

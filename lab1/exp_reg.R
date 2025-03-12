@@ -23,8 +23,12 @@ exp.reg <- function(x, y, data){
 
   # Обчислення точності (MSE)
   mse <- mean((y - exp.model.y)^2)
-  
-  return(c(eq, round(mse, 3)))
+
+  exp.model <- lm(exp.model.y~x, data=data)
+
+  print(summary(exp.model))
+
+  return (c(eq, round(mse, 3)))
 }
 
 

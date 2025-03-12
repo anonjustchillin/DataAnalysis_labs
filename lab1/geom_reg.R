@@ -24,8 +24,12 @@ geom.reg <- function(x, y, data){
 
   # Обчислення точності (MSE)
   mse <- mean((y - geom.model.y)^2)
-  
-  return(c(eq, round(mse, 3)))
+
+  geom.model <- lm(geom.model.y~x, data=data)
+
+  print(summary(geom.model))
+
+  return (c(eq, round(mse, 3)))
 }
 
 

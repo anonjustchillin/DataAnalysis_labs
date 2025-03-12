@@ -20,10 +20,10 @@ lin.reg <- function(x, y, data) {
   
   # Обчислення точності (MSE)
   mse <- mean(lin.model$residuals^2)
+  print(summary(lin.model))
   
   return (c(eq, round(mse, 3)))
 }
-
 
 # Графік лінійної регресії
 lin.plot <- function (p, x, y, data){

@@ -25,7 +25,10 @@ hyper.reg <- function(x, y, data){
 
   # Обчислення точності (MSE)
   mse <- mean(hyper.model$residuals^2)
-  
+
+  print(summary(hyper.model))
+  print(residuals(hyper.model)^2)
+
   return (c(eq, round(mse, 3)))
 }
 
@@ -35,5 +38,4 @@ hyper.plot <- function (p, x, y, data){
   p + geom_point(color="Red") +
     geom_line(aes(x = x, y = fitted.values(hyper.model)), color="Blue") +
     labs(title="Hyperbolic Regression", x="x", y="y")
-
 }
