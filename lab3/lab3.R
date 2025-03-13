@@ -6,9 +6,7 @@ library(Metrics)
 get.tree.info <- function(rf.model, test){
   y.pred <- predict(rf.model, test)
 
-  rf.model
-
-  which.min(rf.model$mse)
+  print(rf.model)
 
   conf.mtx <- caret::confusionMatrix(y.pred, test$Salary)
   print(conf.mtx)
@@ -52,11 +50,17 @@ summary(dataset)
 
 # Removing rows with NA
 df <- dataset[complete.cases(dataset),]
+# Deleting Emp.ID
 df$Emp.ID <- NULL
+# Changing column name
 colnames(df)[9] <- "Salary"
+# Changing Salary and dept data type to factor
 df$Salary <- factor(df$Salary)
 df$dept <- factor(df$dept)
+
+# Number of columns without Salary
 n <- ncol(df)-1
+
 str(df)
 summary(df)
 
@@ -75,7 +79,7 @@ rf.model <- randomForest(reformulate(response = 'Salary',
 get.tree.info(rf.model, test)
 importance(rf.model)
 
-# Removing 3 unimportant columns for a new forest
+# Removing unimportant columns for a new forest
 new.df <- df
 impr <- importance(rf.model)
 
@@ -105,6 +109,22 @@ new.rf.model <- randomForest(reformulate(response = 'Salary',
 get.tree.info(new.rf.model, test)
 importance(new.rf.model)
 
+print("-------- FOREST (500 trees, max nodes 50) --------")
+
+rf.model.maxnodes <- randomForest(reformulate(response = 'Salary',
+                                              names(train)[1:n]),
+                                  data=train, maxnodes=50)
+get.tree.info(rf.model.maxnodes, test)
+importance(rf.model.maxnodes)
+
+print("-------- FOREST (500 trees, node size 100) --------")
+
+new.rf.model.nodesize <- randomForest(reformulate(response = 'Salary',
+                                                  names(train)[1:n]),
+                                      data=train, nodesize=100)
+get.tree.info(new.rf.model.nodesize, test)
+importance(new.rf.model.nodesize)
+
 print("-------- FOREST TUNING --------")
 
 tuned.rf <- tuneRF(train[, -(n+1)], train$Salary,
@@ -115,19 +135,18 @@ get.tree.info(tuned.rf, test)
 importance(tuned.rf)
 
 
-# print("-------- FOREST (5000 trees) --------")
-# 
-# new.rf.model1 <- randomForest(reformulate(response = 'Salary',
-#                                          names(train)[1:n]),
-#                              data=train, ntree=5000)
-# get.tree.info(new.rf.model1, test)
-# importance(new.rf.model1)
-# 
-# print("-------- FOREST (50 trees) --------")
-# 
-# new.rf.model2 <- randomForest(reformulate(response = 'Salary',
-#                                          names(train)[1:n]),
-#                              data=train, ntree=50)
-# get.tree.info(new.rf.model2, test)
-# importance(new.rf.model2)
+print("-------- FOREST (5000 trees) --------")
 
+new.rf.model1 <- randomForest(reformulate(response = 'Salary',
+                                          names(train)[1:n]),
+                              data=train, ntree=5000)
+get.tree.info(new.rf.model1, test)
+importance(new.rf.model1)
+
+print("-------- FOREST (10 trees) --------")
+
+new.rf.model2 <- randomForest(reformulate(response = 'Salary',
+                                          names(train)[1:n]),
+                              data=train, ntree=10)
+get.tree.info(new.rf.model2, test)
+importance(new.rf.model2)
