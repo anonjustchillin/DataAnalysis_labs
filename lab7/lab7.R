@@ -28,11 +28,8 @@ ts.data <- ts(data$Temperature,
 ts.data
 
 # Graphs
-p <- ggplot(data, aes(Year, Temperature))
-p + geom_line(color='blue') + geom_smooth(method='lm', color='red')
-
-ts.plot(ts.data)
-abline(reg=lm(ts.data~time(ts.data)))
+ts.plot(ts.data, col='blue')
+abline(reg=lm(ts.data~time(ts.data)), col='red')
 
 # ACF and PACF
 
