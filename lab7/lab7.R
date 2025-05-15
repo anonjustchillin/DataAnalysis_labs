@@ -114,19 +114,19 @@ RMSE
 
 
 # Exponential Smoothing (single)
-train.size <- as.integer(nrow(data)*0.8)
+# train.size <- as.integer(nrow(data)*0.8)
 
-train.ts <- subset(ts.data, start=1, end=train.size)
-train.ts
-test.ts <- subset(ts.data, start=train.size, end=nrow(data))
-test.ts
+# train.ts <- subset(ts.data, start=1, end=train.size)
+# train.ts
+# test.ts <- subset(ts.data, start=train.size, end=nrow(data))
+# test.ts
 
 hw.mod <- HoltWinters(ts.data, alpha=0.25, beta=FALSE, gamma=FALSE)
 str(hw.mod)
 hw.mod$fitted
 
 plot(hw.mod, col='blue')
-legend("topright", c("Train data","Smoothed data"), lty=8, col=c("blue","red"), cex=0.7)
+legend("topright", c("Original","Smoothed data"), lty=8, col=c("blue","red"), cex=0.7)
 
 
 hw.forecast <- forecast(hw.mod, h=20)
